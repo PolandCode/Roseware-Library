@@ -1187,19 +1187,19 @@ function library:AddWindow(title, options)
 						button.MouseButton1Click:Connect(function()
 							ripple(button, mouse.X, mouse.Y)
 							pcall(callback)
-						end)
+						end)	
 
 						return button
 					end
 
-					function tab_data:AddButton(button_text, callback) -- [Button]
-                        button_text = tostring(button_text or "New Button")
+					function tab_data:AddButtonToggle(ontext, offtext, callback) -- [Button]
+                        local button_data = {}
                         callback = typeof(callback) == "function" and callback or function()end
 
                         local button = Prefabs:FindFirstChild("Button"):Clone()
 
                         button.Parent = new_tab
-                        button.Text = button_text
+                        button.Text = ontext
                         button.Size = UDim2.new(0, gNameLen(button), 0, 20)
                         button.ZIndex = button.ZIndex + (windows * 10)
                         button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
@@ -1213,12 +1213,21 @@ function library:AddWindow(title, options)
                             end
                         end)
 
+                        local toggled = false
                         button.MouseButton1Click:Connect(function()
                             ripple(button, mouse.X, mouse.Y)
-                            pcall(callback)
+                            toggled = not toggled
+                            button.Text = toggled and offtext or ontext
+                            pcall(callback, toggled)
                         end)
 
-                        return button
+                        function button_data:Set(bool)
+                            toggled = (typeof(bool) == "boolean") and bool or false
+                            button.Text = toggled and "Start" or "Stop"
+                            pcall(callback,toggled)
+                        end
+
+                        return button_data, button
                     end
 
 					function tab_data:AddSwitch(switch_text, callback) -- [Switch]
