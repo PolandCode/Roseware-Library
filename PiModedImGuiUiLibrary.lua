@@ -1193,42 +1193,42 @@ function library:AddWindow(title, options)
 					end
 
 					function tab_data:AddButtonToggle(ontext, offtext, callback) -- [Button]
-                        local button_data = {}
-                        callback = typeof(callback) == "function" and callback or function()end
+						local button_data = {}
+						callback = typeof(callback) == "function" and callback or function()end
 
-                        local button = Prefabs:FindFirstChild("Button"):Clone()
+						local button = Prefabs:FindFirstChild("Button"):Clone()
 
-                        button.Parent = new_tab
-                        button.Text = ontext
-                        button.Size = UDim2.new(0, gNameLen(button), 0, 20)
-                        button.ZIndex = button.ZIndex + (windows * 10)
-                        button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
+						button.Parent = new_tab
+						button.Text = ontext
+						button.Size = UDim2.new(0, gNameLen(button), 0, 20)
+						button.ZIndex = button.ZIndex + (windows * 10)
+						button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
 
-                        spawn(function()
-                            while true do
-                                if button and button:GetChildren()[1] then
-                                    button:GetChildren()[1].ImageColor3 = options.main_color
-                                end
-                                RS.Heartbeat:Wait()
-                            end
-                        end)
+						spawn(function()
+						    while true do
+							if button and button:GetChildren()[1] then
+							    button:GetChildren()[1].ImageColor3 = options.main_color
+							end
+							RS.Heartbeat:Wait()
+						    end
+						end)
 
-                        local toggled = false
-                        button.MouseButton1Click:Connect(function()
-                            ripple(button, mouse.X, mouse.Y)
-                            toggled = not toggled
-                            button.Text = toggled and offtext or ontext
-                            pcall(callback, toggled)
-                        end)
+						local toggled = false
+						button.MouseButton1Click:Connect(function()
+						    ripple(button, mouse.X, mouse.Y)
+						    toggled = not toggled
+						    button.Text = toggled and offtext or ontext
+						    pcall(callback, toggled)
+						end)
 
-                        function button_data:Set(bool)
-                            toggled = (typeof(bool) == "boolean") and bool or false
-                            button.Text = toggled and "Start" or "Stop"
-                            pcall(callback,toggled)
-                        end
+						function button_data:Set(bool)
+						    toggled = (typeof(bool) == "boolean") and bool or false
+						    button.Text = toggled and offtext or ontext
+						    pcall(callback,toggled)
+						end
 
-                        return button_data, button
-                    end
+						return button_data, button
+					    end
 
 					function tab_data:AddSwitch(switch_text, callback) -- [Switch]
 						local switch_data = {}
