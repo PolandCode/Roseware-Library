@@ -1162,6 +1162,7 @@ function library:AddWindow(title, options)
 
                         return label_data, label
                     end
+
 					function tab_data:AddButton(button_text, callback) -- [Button]
 						button_text = tostring(button_text or "New Button")
 						callback = typeof(callback) == "function" and callback or function()end
@@ -1190,6 +1191,35 @@ function library:AddWindow(title, options)
 
 						return button
 					end
+
+					function tab_data:AddButton(button_text, callback) -- [Button]
+                        button_text = tostring(button_text or "New Button")
+                        callback = typeof(callback) == "function" and callback or function()end
+
+                        local button = Prefabs:FindFirstChild("Button"):Clone()
+
+                        button.Parent = new_tab
+                        button.Text = button_text
+                        button.Size = UDim2.new(0, gNameLen(button), 0, 20)
+                        button.ZIndex = button.ZIndex + (windows * 10)
+                        button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
+
+                        spawn(function()
+                            while true do
+                                if button and button:GetChildren()[1] then
+                                    button:GetChildren()[1].ImageColor3 = options.main_color
+                                end
+                                RS.Heartbeat:Wait()
+                            end
+                        end)
+
+                        button.MouseButton1Click:Connect(function()
+                            ripple(button, mouse.X, mouse.Y)
+                            pcall(callback)
+                        end)
+
+                        return button
+                    end
 
 					function tab_data:AddSwitch(switch_text, callback) -- [Switch]
 						local switch_data = {}
