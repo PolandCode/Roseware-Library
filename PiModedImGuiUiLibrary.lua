@@ -2062,7 +2062,7 @@ function library:AddWindow(title, options)
 
 	do
 		for i, v in next, Window:GetDescendants() do
-			if hasprop(v, "ZIndex") then
+			if hasprop(v, "GIndex") then
 				v.ZIndex = v.ZIndex + (windows * 10)
 			end
 		end
